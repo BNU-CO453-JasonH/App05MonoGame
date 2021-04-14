@@ -17,6 +17,7 @@ namespace App05MonoGame
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
+    /// Modified by Jason Huggins (14/04/2021)
     /// </authors>
     public class App05Game : Game
     {
@@ -48,6 +49,7 @@ namespace App05MonoGame
         private AnimatedSprite enemySprite;
 
         private Button restartButton;
+        private Button quitButton;
 
         private int score;
         private int health;
@@ -106,12 +108,22 @@ namespace App05MonoGame
             restartButton = new Button(arialFont,
                 Content.Load<Texture2D>("Controls/button-icon-png-200"))
             {
+                Position = new Vector2(900, 600),
+                Text = "Restart",
+                Scale = 0.6f
+            };
+
+            restartButton.click += RestartButton_click;
+
+            quitButton = new Button(arialFont,
+                Content.Load<Texture2D>("Controls/button-icon-png-200"))
+            {
                 Position = new Vector2(1100, 600),
                 Text = "Quit",
                 Scale = 0.6f
             };
 
-            restartButton.click += RestartButton_click;
+            quitButton.click += QuitButton_click;
 
             // suitable for asteroids type game
 
@@ -127,10 +139,23 @@ namespace App05MonoGame
             coinsController.CreateCoin(graphicsDevice, coinSheet);
         }
 
+        /// <summary>
+        /// Restarts the game when the Restart button in the game
+        /// is clicked.
+        /// </summary>
         private void RestartButton_click(object sender, System.EventArgs e)
         {
-            //TODO: do something when the button is clicked!
-            
+            score = 0;
+            health = 100;
+            // TODO: Restart the game here (incl. sprite positioning)
+        }
+
+        /// <summary>
+        /// Exits the game when the Quit button in the game
+        /// is clicked.
+        /// </summary>
+        private void QuitButton_click(object sender, System.EventArgs e)
+        {
             Exit();
         }
 
@@ -170,8 +195,7 @@ namespace App05MonoGame
                 Speed = 200,
                 DirectionControl = DirectionControl.Rotational
             };
-    }
-
+        }
 
         /// <summary>
         /// This is a Sprite with four animations for the four
@@ -231,7 +255,6 @@ namespace App05MonoGame
             enemySprite.PlayAnimation("Left");
         }
 
-
         /// <summary>
         /// Called 60 frames/per second and updates the positions
         /// of all the drawable objects
@@ -246,6 +269,7 @@ namespace App05MonoGame
                 Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
             restartButton.Update(gameTime);
+            quitButton.Update(gameTime);
 
             // Update Asteroids
 
@@ -289,10 +313,10 @@ namespace App05MonoGame
 
             spriteBatch.Begin();
 
-
             spriteBatch.Draw(backgroundImage, Vector2.Zero, Color.White);
 
             restartButton.Draw(spriteBatch);
+            quitButton.Draw(spriteBatch);
 
             // Draw asteroids game
 
@@ -357,7 +381,6 @@ namespace App05MonoGame
             spriteBatch.DrawString(calibriFont, names, bottomCentre, Color.Yellow);
             spriteBatch.DrawString(calibriFont, module, bottomLeft, Color.Yellow);
             spriteBatch.DrawString(calibriFont, app, bottomRight, Color.Yellow);
-
         }
     }
 }
