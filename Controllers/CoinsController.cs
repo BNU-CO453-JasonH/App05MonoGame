@@ -9,7 +9,7 @@ namespace App05MonoGame.Controllers
 {
     public enum CoinColours
     {
-        copper = 100,
+        Copper = 100,
         Silver = 200,
         Gold = 500
     }
@@ -21,10 +21,12 @@ namespace App05MonoGame.Controllers
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
+    /// Modified by Jason Huggins (15/04/2021)
     /// </authors>
     public class CoinsController
     {
         private SoundEffect coinEffect;
+        private int coinValue;
 
         private readonly List<AnimatedSprite> Coins;        
 
@@ -32,6 +34,7 @@ namespace App05MonoGame.Controllers
         {
             Coins = new List<AnimatedSprite>();
         }
+
         /// <summary>
         /// Create an animated sprite of a copper coin
         /// which could be collected by the player for a score
@@ -39,6 +42,7 @@ namespace App05MonoGame.Controllers
         public void CreateCoin(GraphicsDevice graphics, Texture2D coinSheet)
         {
             coinEffect = SoundController.GetSoundEffect("Coin");
+            coinValue = (int)CoinColours.Copper;
             Animation animation = new Animation("coin", coinSheet, 8);
 
             AnimatedSprite coin = new AnimatedSprite()
@@ -53,7 +57,7 @@ namespace App05MonoGame.Controllers
             Coins.Add(coin);
         }
 
-        public void HasCollided(AnimatedPlayer player)
+        public int HasCollided(AnimatedPlayer player)
         {
             foreach (AnimatedSprite coin in Coins)
             {
@@ -64,8 +68,12 @@ namespace App05MonoGame.Controllers
                     coin.IsActive = false;
                     coin.IsAlive = false;
                     coin.IsVisible = false;
+
+                    return coinValue;
                 }
-            }           
+            }
+
+            return 0;
         }
 
         public void Update(GameTime gameTime)
