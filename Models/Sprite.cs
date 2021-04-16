@@ -1,6 +1,7 @@
 ﻿using App05MonoGame.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace App05MonoGame.Models
@@ -15,6 +16,9 @@ namespace App05MonoGame.Models
     /// Speed of 60 is one pixel per second.  The Sprite can only
     /// move if it is Active and Alive.
     /// </summary>
+    /// <author>
+    /// Modified by Jason Huggins (16/04/2021)
+    /// </author>
     public class Sprite: ICloneable
     {
         #region Properties
@@ -71,7 +75,18 @@ namespace App05MonoGame.Models
                 );
             }
         }
-        // Variables
+        
+        public KeyboardState CurrentKey { get; set; }
+
+        public KeyboardState PreviousKey { get; set; }
+
+        public float RotationVelocity { get; set; }
+
+        public float LinearVelocity { get; set; }
+
+        public Sprite Parent { get; set; }
+
+        public float LifeSpan { get; set; }
 
         #endregion
 

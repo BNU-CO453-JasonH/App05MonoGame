@@ -205,10 +205,11 @@ namespace App05MonoGame
         {
             Texture2D sheet4x3 = Content.Load<Texture2D>("Actors/rsc-sprite-sheet1");
 
-            AnimationController contoller = new AnimationController(graphicsDevice, sheet4x3, 4, 3);
+            AnimationController controller = new 
+                AnimationController(graphicsDevice, sheet4x3, 4, 3);
 
             string[] keys = new string[] { "Down", "Left", "Right", "Up" };
-            contoller.CreateAnimationGroup(keys);
+            controller.CreateAnimationGroup(keys);
 
             playerSprite = new AnimatedPlayer()
             {
@@ -220,10 +221,12 @@ namespace App05MonoGame
                 Direction = new Vector2(1, 0),
 
                 Rotation = MathHelper.ToRadians(0),
-                RotationSpeed = 0f
+                RotationSpeed = 0f,
+
+                Bullet = new Bullet(Content.Load<Texture2D>("Actors/bullet"))
             };
 
-            contoller.AppendAnimationsTo(playerSprite);
+            controller.AppendAnimationsTo(playerSprite);
         }
 
         /// <summary>
