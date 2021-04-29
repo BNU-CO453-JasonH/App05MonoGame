@@ -43,7 +43,7 @@ namespace App05MonoGame
 
         private readonly CoinsController coinsController;
         private readonly PlayerController playerController;
-        private readonly BulletController bulletController;
+        private BulletController bulletController;
 
         private AnimatedPlayer playerSprite;
         private AnimatedSprite enemySprite;
@@ -61,7 +61,6 @@ namespace App05MonoGame
 
             coinsController = new CoinsController();
             playerController = new PlayerController();
-            bulletController = new BulletController();
         }
 
         /// <summary>
@@ -94,6 +93,7 @@ namespace App05MonoGame
 
             SoundController.LoadContent(Content);
             SoundController.PlaySong("Adventure");
+            
             flameEffect = SoundController.GetSoundEffect("Flame");
 
             // Load Fonts
@@ -156,11 +156,13 @@ namespace App05MonoGame
         {
             Texture2D playerSheet = Content.Load<Texture2D>
                 ("Actors/rsc-sprite-sheet1");
+            
             playerSprite = playerController.CreatePlayer
                 (graphicsDevice, playerSheet);
 
             Texture2D bulletTexture = Content.Load<Texture2D>("Actors/bullet");
-            bulletController.CreateBullet(bulletTexture);
+            bulletController = new BulletController(bulletTexture);
+            playerSprite.BulletController = bulletController;
         }
 
         // TODO: Put this in EnemyController class

@@ -20,18 +20,12 @@ namespace App05MonoGame.Controllers
 
         public List<Bullet> Bullets { get; set; }
 
-        public BulletController()
+        public BulletController(Texture2D bulletTexture)
         {
             Bullets = new List<Bullet>();
+            this.BulletTexture = bulletTexture;
         }
 
-        /// <summary>
-        /// Creates a new bullet and adds it to the list.
-        /// </summary>
-        public void CreateBullet(Texture2D bulletTexture)
-        {
-            this.BulletTexture = bulletTexture;                
-        }
 
         public void UpdateBullets(GameTime gameTime)
         {
@@ -56,11 +50,13 @@ namespace App05MonoGame.Controllers
         public void AddBullet(AnimatedPlayer player)
         {
             Bullet bullet = new Bullet(BulletTexture);
+
             bullet.Direction = player.Direction;
             bullet.Position = player.Position;
             bullet.LinearVelocity = player.LinearVelocity * 2;
             bullet.LifeSpan = 2f;
             bullet.Parent = player;
+            
             Bullets.Add(bullet);
         }
     }

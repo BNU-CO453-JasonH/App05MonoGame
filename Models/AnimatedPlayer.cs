@@ -24,14 +24,14 @@ namespace App05MonoGame.Models
 
         public int Health { get; set; }
 
+        public BulletController BulletController { get; set; }
+
         private readonly MovementController movement;
-        private readonly BulletController bulletController;
 
         public AnimatedPlayer() : base()
         {
             CanWalk = false;
             movement = new MovementController();
-            bulletController = new BulletController();
             Health = MAX_HEALTH;
             Score = 0;
         }
@@ -59,9 +59,9 @@ namespace App05MonoGame.Models
             if (CanWalk) Walk();
 
             if (CurrentKey.IsKeyDown(Keys.Space) && 
-                PreviousKey.IsKeyUp(Keys.Space))
+                PreviousKey.IsKeyUp(Keys.Space) && (BulletController != null))
             {
-                bulletController.AddBullet(this);
+                BulletController.AddBullet(this);
             }
 
             base.Update(gameTime);
