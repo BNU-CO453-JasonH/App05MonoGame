@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using App05MonoGame.Models;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace App05MonoGame.Controllers
@@ -16,10 +17,15 @@ namespace App05MonoGame.Controllers
     /// </author>
     public class BulletController
     {
+        public SoundEffect killEffect { get; set; }
+
         public Texture2D BulletTexture { get; set; }
 
         public List<Bullet> Bullets { get; set; }
 
+        /// <summary>
+        /// Create a list of bullets and store the bullet image
+        /// </summary>
         public BulletController(Texture2D bulletTexture)
         {
             Bullets = new List<Bullet>();
@@ -52,12 +58,33 @@ namespace App05MonoGame.Controllers
             Bullet bullet = new Bullet(BulletTexture);
 
             bullet.Direction = player.Direction;
-            bullet.Position = player.Position;
-            bullet.LinearVelocity = player.LinearVelocity * 2;
-            bullet.LifeSpan = 2f;
+
+            bullet.Position = new Vector2(
+                player.Position.X + 60, player.Position.Y + 40);
+
+            bullet.LifeSpan = 2f; // seconds
             bullet.Parent = player;
             
             Bullets.Add(bullet);
+        }
+
+        public void HasCollided(AnimatedSprite enemy)
+        {
+            foreach (Bullet bullet in Bullets)
+            {
+                if (bullet.HasCollided(enemy))
+                {
+                    if(killEffect != null)
+                        killEffect.Play();
+
+                    enemy.IsActive = false;
+                    enemy.IsAlive = false;
+                    enemy.IsVisible = false;
+
+                    bullet.IsVisible = false;
+                }
+            }
+
         }
     }
 }

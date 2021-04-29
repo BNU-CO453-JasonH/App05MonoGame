@@ -17,11 +17,14 @@ namespace App05MonoGame.Models
         {
             RotationVelocity = 3f;
             LinearVelocity = 4f;
+
             Timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
             
             if (Timer > LifeSpan)
             {
                 IsVisible = false;
+                IsActive = false;
+                IsAlive = false;
             }
             else
             {

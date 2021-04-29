@@ -36,7 +36,7 @@ namespace App05MonoGame
         private SpriteBatch spriteBatch;
 
         private SpriteFont arialFont;
-        private SpriteFont calibriFont;
+        private SpriteFont calibriFont;// change to verdana on Mac
 
         private Texture2D backgroundImage;
         private SoundEffect flameEffect;
@@ -162,6 +162,8 @@ namespace App05MonoGame
 
             Texture2D bulletTexture = Content.Load<Texture2D>("Actors/bullet");
             bulletController = new BulletController(bulletTexture);
+            bulletController.killEffect = flameEffect;
+
             playerSprite.BulletController = bulletController;
         }
 
@@ -221,10 +223,13 @@ namespace App05MonoGame
                 enemySprite.IsActive = false;
             }
 
+            bulletController.UpdateBullets(gameTime);
+            bulletController.HasCollided(enemySprite);
+
+
             coinsController.Update(gameTime);
             playerSprite.Score += coinsController.HasCollided(playerSprite);
 
-            bulletController.UpdateBullets(gameTime);
 
             base.Update(gameTime);
         }
