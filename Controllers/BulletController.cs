@@ -8,8 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 namespace App05MonoGame.Controllers
 {
     /// <summary>
-    /// 
+    /// This class creates a list of bullets which will be fired
+    /// when the player presses down on the space bar in the game.
     /// </summary>
+    /// <author>
+    /// Jason Huggins (29/04/2021)
+    /// </author>
     public class BulletController
     {
         public Texture2D BulletTexture { get; set; }

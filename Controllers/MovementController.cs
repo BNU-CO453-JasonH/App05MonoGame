@@ -4,6 +4,14 @@ using Microsoft.Xna.Framework.Input;
 
 namespace App05MonoGame.Controllers
 {
+    /// <summary>
+    /// This class allows the player to be moved using
+    /// the arrow keys, setting appropriate input keys.
+    /// </summary>
+    /// <author>
+    /// Derek Peacock & Andrei Cruceru
+    /// Modified by Jason Huggins (29/04/2021)
+    /// </author>
     public class MovementController
     {
         public InputKeys InputKeys { get; set; }
