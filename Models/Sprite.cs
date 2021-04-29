@@ -193,6 +193,5 @@ namespace App05MonoGame.Models
         {
             return this.MemberwiseClone();
         }
-
     }
 }

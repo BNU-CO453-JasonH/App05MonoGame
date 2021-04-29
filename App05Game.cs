@@ -18,7 +18,7 @@ namespace App05MonoGame
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (22/04/2021)
+    /// Modified by Jason Huggins (29/04/2021)
     /// </authors>
     public class App05Game : Game
     {
@@ -42,15 +42,14 @@ namespace App05MonoGame
         private SoundEffect flameEffect;
 
         private readonly CoinsController coinsController;
+        private readonly PlayerController playerController;
+        private readonly BulletController bulletController;
 
         private AnimatedPlayer playerSprite;
         private AnimatedSprite enemySprite;
 
         private Button restartButton;
         private Button quitButton;
-
-        private int score;
-        private int health;
 
         #endregion
 
@@ -61,6 +60,8 @@ namespace App05MonoGame
             IsMouseVisible = true;
 
             coinsController = new CoinsController();
+            playerController = new PlayerController();
+            bulletController = new BulletController();
         }
 
         /// <summary>
@@ -75,9 +76,6 @@ namespace App05MonoGame
             graphicsManager.ApplyChanges();
 
             graphicsDevice = graphicsManager.GraphicsDevice;
-
-            score = 0;
-            health = 100;
 
             base.Initialize();
         }
@@ -136,9 +134,9 @@ namespace App05MonoGame
         /// </summary>
         private void RestartButton_click(object sender, System.EventArgs e)
         {
-            score = 0;
-            health = 100;
-            // TODO: Restart the game here (incl. sprite positioning)
+            playerSprite.Score = 0;
+            playerSprite.Health = 100;
+            playerController.StartPlayer();
         }
 
         /// <summary>
@@ -156,32 +154,16 @@ namespace App05MonoGame
         /// </summary>
         private void SetupAnimatedPlayer()
         {
-            Texture2D sheet4x3 = Content.Load<Texture2D>("Actors/rsc-sprite-sheet1");
+            Texture2D playerSheet = Content.Load<Texture2D>
+                ("Actors/rsc-sprite-sheet1");
+            playerSprite = playerController.CreatePlayer
+                (graphicsDevice, playerSheet);
 
-            AnimationController controller = new 
-                AnimationController(graphicsDevice, sheet4x3, 4, 3);
-
-            string[] keys = new string[] { "Down", "Left", "Right", "Up" };
-            controller.CreateAnimationGroup(keys);
-
-            playerSprite = new AnimatedPlayer()
-            {
-                CanWalk = true,
-                Scale = 2.0f,
-
-                Position = new Vector2(200, 200),
-                Speed = 200,
-                Direction = new Vector2(1, 0),
-
-                Rotation = MathHelper.ToRadians(0),
-                RotationSpeed = 0f,
-
-                Bullet = new Bullet(Content.Load<Texture2D>("Actors/bullet"))
-            };
-
-            controller.AppendAnimationsTo(playerSprite);
+            Texture2D bulletTexture = Content.Load<Texture2D>("Actors/bullet");
+            bulletController.CreateBullet(bulletTexture);
         }
 
+        // TODO: Put this in EnemyController class
         /// <summary>
         /// This is an enemy Sprite with four animations for the four
         /// directions, up, down, left and right.  Has no intelligence!
@@ -238,7 +220,9 @@ namespace App05MonoGame
             }
 
             coinsController.Update(gameTime);
-            score += coinsController.HasCollided(playerSprite);
+            playerSprite.Score += coinsController.HasCollided(playerSprite);
+
+            bulletController.UpdateBullets(gameTime);
 
             base.Update(gameTime);
         }
@@ -260,6 +244,7 @@ namespace App05MonoGame
 
             playerSprite.Draw(spriteBatch);
             coinsController.Draw(spriteBatch);
+            bulletController.DrawBullets(spriteBatch);
             enemySprite.Draw(spriteBatch);
 
             DrawGameStatus(spriteBatch);
@@ -276,7 +261,7 @@ namespace App05MonoGame
         public void DrawGameStatus(SpriteBatch spriteBatch)
         {
             Vector2 topLeft = new Vector2(4, 4);
-            string status = $"Score = {score:##0}";
+            string status = $"Score = {playerSprite.Score:##0}";
 
             spriteBatch.DrawString(arialFont, status, topLeft, Color.White);
 
@@ -285,7 +270,7 @@ namespace App05MonoGame
             Vector2 topCentre = new Vector2((HD_Width/2 - gameSize.X/2), 4);
             spriteBatch.DrawString(arialFont, game, topCentre, Color.White);
 
-            string healthText = $"Health = {health}%";
+            string healthText = $"Health = {playerSprite.Health}%";
             Vector2 healthSize = arialFont.MeasureString(healthText);
             Vector2 topRight = new Vector2(HD_Width - (healthSize.X + 4), 4);
             spriteBatch.DrawString(arialFont, healthText, topRight, Color.White);

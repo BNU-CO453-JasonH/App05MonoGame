@@ -11,7 +11,7 @@ namespace App05MonoGame.Models
     {
         public float Timer { get; set; }
 
-        public Bullet(Texture2D texture) : base() { }
+        public Bullet(Texture2D texture) : base(texture, 0, 0) { }
 
         public override void Update(GameTime gameTime)
         {

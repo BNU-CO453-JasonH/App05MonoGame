@@ -12,20 +12,28 @@ namespace App05MonoGame.Models
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (16/04/2021)
+    /// Modified by Jason Huggins (29/04/2021)
     /// </authors>
     public class AnimatedPlayer : AnimatedSprite
     {
+        public const int MAX_HEALTH = 100;
+
         public bool CanWalk { get; set; }
 
-        public Bullet Bullet { get; set; }
+        public int Score { get; set; }
+
+        public int Health { get; set; }
 
         private readonly MovementController movement;
+        private readonly BulletController bulletController;
 
         public AnimatedPlayer() : base()
         {
             CanWalk = false;
             movement = new MovementController();
+            bulletController = new BulletController();
+            Health = MAX_HEALTH;
+            Score = 0;
         }
 
         /// <summary>
@@ -53,26 +61,10 @@ namespace App05MonoGame.Models
             if (CurrentKey.IsKeyDown(Keys.Space) && 
                 PreviousKey.IsKeyUp(Keys.Space))
             {
-                AddBullet();
+                bulletController.AddBullet(this);
             }
 
             base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// Clones the bullet when the player fires their
-        /// weapon by holding down the space bar. 
-        /// </summary>
-        private void AddBullet()
-        {
-            var bullet = Bullet.Clone() as Bullet;
-            bullet.Direction = this.Direction;
-            bullet.Position = this.Position;
-            bullet.LinearVelocity = this.LinearVelocity * 2;
-            bullet.LifeSpan = 2f;
-            bullet.Parent = this;
-
-            // TODO: Fix as the bullets aren't showing up.
         }
 
         /// <summary>
