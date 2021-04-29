@@ -8,7 +8,10 @@ using Microsoft.Xna.Framework.Graphics;
 namespace App05MonoGame.Controllers
 {
     /// <summary>
-    /// 
+    /// This class handles the control of the player,
+    /// setting their start position in the game and
+    /// the different animations that play when they
+    /// press on an arrow key.
     /// </summary>
     public class PlayerController
     {

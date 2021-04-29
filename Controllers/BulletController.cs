@@ -12,9 +12,6 @@ namespace App05MonoGame.Controllers
     /// This class creates a list of bullets which will be fired
     /// when the player presses down on the space bar in the game.
     /// </summary>
-    /// <author>
-    /// Jason Huggins (29/04/2021)
-    /// </author>
     public class BulletController
     {
         public SoundEffect killEffect { get; set; }
@@ -31,7 +28,6 @@ namespace App05MonoGame.Controllers
             Bullets = new List<Bullet>();
             this.BulletTexture = bulletTexture;
         }
-
 
         public void UpdateBullets(GameTime gameTime)
         {
@@ -68,6 +64,12 @@ namespace App05MonoGame.Controllers
             Bullets.Add(bullet);
         }
 
+        /// <summary>
+        /// Checks if a fired bullet has hit an enemy and
+        /// if it has, the enemy will be killed and
+        /// removed from the screen. The bullet will
+        /// also disappear.
+        /// </summary>
         public void HasCollided(AnimatedSprite enemy)
         {
             foreach (Bullet bullet in Bullets)

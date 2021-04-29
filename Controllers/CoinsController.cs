@@ -21,7 +21,7 @@ namespace App05MonoGame.Controllers
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (15/04/2021)
+    /// Modified by Jason Huggins (29/04/2021)
     /// </authors>
     public class CoinsController
     {
@@ -57,6 +57,16 @@ namespace App05MonoGame.Controllers
             Coins.Add(coin);
         }
 
+        /// <summary>
+        /// Checks if a coin has collided with a player (i.e. the 
+        /// player walks over it to pick it up) and if it has,
+        /// a sound effect will play and the coin will disappear
+        /// from the screen.
+        /// </summary>
+        /// <returns>
+        /// The value of the coin to add onto the player's current
+        /// score.
+        /// </returns>
         public int HasCollided(AnimatedPlayer player)
         {
             foreach (AnimatedSprite coin in Coins)
