@@ -277,8 +277,8 @@ namespace App05MonoGame
         {
             int margin = 20;
 
-            string names = "Derek & Andrei";
-            string app = "App05: MonogGame";
+            string names = "Derek & Andrei; modified by Jason";
+            string app = "App05: MonoGame";
             string module = "BNU CO453-2020";
 
             Vector2 namesSize = calibriFont.MeasureString(names);
