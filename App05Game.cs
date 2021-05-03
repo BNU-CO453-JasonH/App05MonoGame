@@ -43,6 +43,7 @@ namespace App05MonoGame
 
         private readonly CoinsController coinsController;
         private readonly PlayerController playerController;
+        private readonly EnemyController enemyController;
         private BulletController bulletController;
 
         private AnimatedPlayer playerSprite;
@@ -61,6 +62,7 @@ namespace App05MonoGame
 
             coinsController = new CoinsController();
             playerController = new PlayerController();
+            enemyController = new EnemyController();
         }
 
         /// <summary>
@@ -137,6 +139,7 @@ namespace App05MonoGame
             playerSprite.Score = 0;
             playerSprite.Health = 100;
             playerController.StartPlayer();
+            enemyController.StartEnemy();
         }
 
         /// <summary>
@@ -167,34 +170,16 @@ namespace App05MonoGame
             playerSprite.BulletController = bulletController;
         }
 
-        // TODO: Put this in EnemyController class
         /// <summary>
         /// This is an enemy Sprite with four animations for the four
         /// directions, up, down, left and right.  Has no intelligence!
         /// </summary>
         private void SetupEnemy()
         {
-            Texture2D sheet4x3 = Content.Load<Texture2D>("Actors/rsc-sprite-sheet3");
-
-            AnimationController manager = new AnimationController(graphicsDevice, sheet4x3, 4, 3);
-
-            string[] keys = new string[] { "Down", "Left", "Right", "Up" };
-
-            manager.CreateAnimationGroup(keys);
-
-            enemySprite = new AnimatedSprite()
-            {
-                Scale = 2.0f,
-
-                Position = new Vector2(1000, 200),
-                Direction = new Vector2(-1, 0),
-                Speed = 50,
-
-                Rotation = MathHelper.ToRadians(0),
-            };
-
-            manager.AppendAnimationsTo(enemySprite);
-            enemySprite.PlayAnimation("Left");
+            Texture2D enemySheet = Content.Load<Texture2D>
+                ("Actors/rsc-sprite-sheet3");
+            enemySprite = enemyController.CreateEnemy(graphicsDevice,
+                enemySheet);
         }
 
         /// <summary>
