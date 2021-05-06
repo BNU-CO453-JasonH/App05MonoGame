@@ -69,7 +69,7 @@ namespace App05MonoGame.Controllers
             double fieldOfView = Vector2.Distance(Player.Position, 
                 Enemy.Position);
 
-            // Enemy can see player in field of view - needs fixing
+            // Enemy can see player in field of view and changes direction
             if (fieldOfView < 500)
             {
                 Vector2 direction = Player.Position - Enemy.Position;
