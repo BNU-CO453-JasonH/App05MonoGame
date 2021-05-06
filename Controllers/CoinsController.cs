@@ -1,7 +1,9 @@
-﻿using App05MonoGame.Models;
+﻿using App05MonoGame.Helpers;
+using App05MonoGame.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 
@@ -21,18 +23,23 @@ namespace App05MonoGame.Controllers
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (29/04/2021)
+    /// Modified by Jason Huggins (06/05/2021)
     /// </authors>
     public class CoinsController
     {
         private SoundEffect coinEffect;
         private int coinValue;
+        private double maxTime;
+        private double timer;
+        private AnimatedSprite spriteCoinTemplate;
 
         private readonly List<AnimatedSprite> Coins;        
 
         public CoinsController()
         {
             Coins = new List<AnimatedSprite>();
+            maxTime = 5.0;
+            timer = maxTime;
         }
 
         /// <summary>
@@ -53,6 +60,8 @@ namespace App05MonoGame.Controllers
                 Position = new Vector2(600, 100),
                 Speed = 0,
             };
+
+            spriteCoinTemplate = coin;
 
             Coins.Add(coin);
         }
@@ -88,6 +97,27 @@ namespace App05MonoGame.Controllers
 
         public void Update(GameTime gameTime)
         {
+            timer -= gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Spawns coins into the game at random positions.
+            if (timer <= 0)
+            {
+                int x = RandomNumber.Generator.Next(1000) + 100;
+                int y = RandomNumber.Generator.Next(500) + 100;
+
+                AnimatedSprite coin = new AnimatedSprite()
+                {
+                    Animation = spriteCoinTemplate.Animation,
+                    Image = spriteCoinTemplate.Image,
+                    Scale = spriteCoinTemplate.Scale,
+                    Position = new Vector2(x, y),
+                    Speed = 0,
+                };
+
+                Coins.Add(coin);
+                timer = maxTime;
+            }
+
             foreach(AnimatedSprite coin in Coins)
             {
                 coin.Update(gameTime);

@@ -8,6 +8,17 @@ using Microsoft.Xna.Framework.Input;
 namespace App05MonoGame
 {
     /// <summary>
+    /// 
+    /// </summary>
+    public enum GameState
+    {
+        STARTING,
+        PLAYING,
+        WON,
+        LOST
+    }
+
+    /// <summary>
     /// This simple game has a similar style to Pac-Man
     /// where the player moves around collecting
     /// randomly spawned coins, while trying 
@@ -18,7 +29,7 @@ namespace App05MonoGame
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (03/05/2021)
+    /// Modified by Jason Huggins (06/05/2021)
     /// </authors>
     public class App05Game : Game
     {
@@ -51,6 +62,8 @@ namespace App05MonoGame
 
         private Button restartButton;
         private Button quitButton;
+
+        private GameState gameState;
 
         #endregion
 
@@ -180,6 +193,7 @@ namespace App05MonoGame
                 ("Actors/rsc-sprite-sheet3");
             enemySprite = enemyController.CreateEnemy(graphicsDevice,
                 enemySheet);
+            enemyController.Player = playerSprite;
         }
 
         /// <summary>
@@ -199,7 +213,7 @@ namespace App05MonoGame
             quitButton.Update(gameTime);
 
             playerSprite.Update(gameTime);
-            enemySprite.Update(gameTime);
+            enemyController.Update(gameTime);
 
             if (playerSprite.HasCollided(enemySprite))
             {
