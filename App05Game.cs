@@ -191,8 +191,10 @@ namespace App05MonoGame
         {
             Texture2D enemySheet = Content.Load<Texture2D>
                 ("Actors/rsc-sprite-sheet3");
-            enemySprite = enemyController.CreateEnemy(graphicsDevice,
-                enemySheet);
+            
+            enemySprite = enemyController.CreateEnemy
+                (graphicsDevice,enemySheet);
+
             enemyController.Player = playerSprite;
         }
 

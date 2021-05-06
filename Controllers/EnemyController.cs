@@ -70,11 +70,12 @@ namespace App05MonoGame.Controllers
                 Enemy.Position);
 
             // Enemy can see player in field of view - needs fixing
-            if (fieldOfView < 100)
+            if (fieldOfView < 500)
             {
-                Enemy.Direction = new Vector2(Player.Position.X -
-                    Enemy.Position.X, Player.Position.Y - Enemy.
-                    Position.Y);
+                Vector2 direction = Player.Position - Enemy.Position;
+                direction.Normalize();
+
+                Enemy.Direction = direction;
             }
             else if (timer < 0)
             {
