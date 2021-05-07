@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 namespace App05MonoGame
 {
     /// <summary>
-    /// 
+    /// Different states for the game.
     /// </summary>
     public enum GameState
     {
@@ -29,7 +29,7 @@ namespace App05MonoGame
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (06/05/2021)
+    /// Modified by Jason Huggins (07/05/2021)
     /// </authors>
     public class App05Game : Game
     {
@@ -90,6 +90,8 @@ namespace App05MonoGame
             graphicsManager.ApplyChanges();
 
             graphicsDevice = graphicsManager.GraphicsDevice;
+
+            gameState = GameState.STARTING;
 
             base.Initialize();
         }
@@ -208,6 +210,8 @@ namespace App05MonoGame
         /// </param>
         protected override void Update(GameTime gameTime)
         {
+            gameState = GameState.PLAYING;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || 
                 Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
@@ -227,10 +231,10 @@ namespace App05MonoGame
             bulletController.UpdateBullets(gameTime);
             bulletController.HasCollided(enemySprite);
 
-
             coinsController.Update(gameTime);
             playerSprite.Score += coinsController.HasCollided(playerSprite);
 
+            enemyController.HasCollided(playerSprite);
 
             base.Update(gameTime);
         }

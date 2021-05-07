@@ -86,7 +86,6 @@ namespace App05MonoGame.Controllers
                     bullet.IsVisible = false;
                 }
             }
-
         }
     }
 }

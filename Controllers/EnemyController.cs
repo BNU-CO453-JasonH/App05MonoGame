@@ -62,6 +62,32 @@ namespace App05MonoGame.Controllers
             Enemy.Speed = 100;
         }
 
+        // TODO: Player gets stuck when the enemy hits them, needs fixing.
+        // TODO: Player's health drains to 0 instantly when hit, needs fixing.
+        /// <summary>
+        /// If the enemy collides with the player (hitting them), the
+        /// player will lose 5% of their health. If their health
+        /// drops to 0, they will lose the game and disappear.
+        /// </summary>
+        public void HasCollided(AnimatedPlayer player)
+        {
+            if (Enemy.HasCollided(player))
+            {
+                if (player.Health > 5)
+                {
+                    player.Health -= 5;
+                }
+                else
+                {
+                    player.Health = 0;
+
+                    player.IsActive = false;
+                    player.IsAlive = false;
+                    player.IsVisible = false;
+                }
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
             timer -= gameTime.ElapsedGameTime.TotalSeconds;
