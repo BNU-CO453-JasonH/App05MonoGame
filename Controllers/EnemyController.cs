@@ -17,7 +17,6 @@ namespace App05MonoGame.Controllers
     public class EnemyController
     { 
         public AnimatedSprite Enemy { get; set; }
-
         public AnimatedPlayer Player { get; set; }
 
         private double maxTime;
@@ -55,15 +54,40 @@ namespace App05MonoGame.Controllers
             return Enemy;
         }
 
+        /// <summary>
+        /// Resets the enemy to their starting position, direction
+        /// and speed. If the player has collided with them at the
+        /// enemy's starting position, the enemy will be moved
+        /// elsewhere. 
+        /// </summary>
         public void StartEnemy()
         {
-            Enemy.Position = new Vector2(1000, 200);
+            double fieldOfView = Vector2.Distance(Player.Position,
+                Enemy.Position);
+
+            if (fieldOfView < 500)
+            {
+                Enemy.Position = new Vector2(850, 100);
+            }
+            else
+            {
+                Enemy.Position = new Vector2(1000, 200);
+            }
+
             Enemy.Direction = new Vector2(-1, 0);
             Enemy.Speed = 100;
         }
 
-        // TODO: Player gets stuck when the enemy hits them, needs fixing.
-        // TODO: Player's health drains to 0 instantly when hit, needs fixing.
+        /// The enemy will be removed if the player has won the game 
+        /// (score reaches 1000) to avoid hitting them while they're 
+        /// reading the on-screen message.
+        public void RemoveEnemy()
+        {
+            Enemy.IsActive = false;
+            Enemy.IsAlive = false;
+            Enemy.IsVisible = false;
+        }
+
         /// <summary>
         /// If the enemy collides with the player (hitting them), the
         /// player will lose 5% of their health. If their health

@@ -29,7 +29,7 @@ namespace App05MonoGame
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (07/05/2021)
+    /// Modified by Jason Huggins (09/05/2021)
     /// </authors>
     public class App05Game : Game
     {
@@ -110,7 +110,7 @@ namespace App05MonoGame
 
             SoundController.LoadContent(Content);
             SoundController.PlaySong("Adventure");
-            
+
             flameEffect = SoundController.GetSoundEffect("Flame");
 
             // Load Fonts
@@ -174,7 +174,7 @@ namespace App05MonoGame
         {
             Texture2D playerSheet = Content.Load<Texture2D>
                 ("Actors/rsc-sprite-sheet1");
-            
+
             playerSprite = playerController.CreatePlayer
                 (graphicsDevice, playerSheet);
 
@@ -193,9 +193,9 @@ namespace App05MonoGame
         {
             Texture2D enemySheet = Content.Load<Texture2D>
                 ("Actors/rsc-sprite-sheet3");
-            
+
             enemySprite = enemyController.CreateEnemy
-                (graphicsDevice,enemySheet);
+                (graphicsDevice, enemySheet);
 
             enemyController.Player = playerSprite;
         }
@@ -212,7 +212,7 @@ namespace App05MonoGame
         {
             gameState = GameState.PLAYING;
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || 
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
             restartButton.Update(gameTime);
@@ -222,14 +222,6 @@ namespace App05MonoGame
             enemyController.Update(gameTime);
             enemyController.HasCollided(playerSprite);
 
-            // This needs removing
-            //if (playerSprite.HasCollided(enemySprite))
-            //{
-            //    playerSprite.IsActive = false;
-            //    playerSprite.IsAlive = false;
-            //    enemySprite.IsActive = false;
-            //}
-
             bulletController.UpdateBullets(gameTime);
             bulletController.HasCollided(enemySprite);
 
@@ -237,6 +229,18 @@ namespace App05MonoGame
             playerSprite.Score += coinsController.HasCollided(playerSprite);
 
             enemyController.HasCollided(playerSprite);
+
+            // Player wins the game if their score is over 1000.
+            if (playerSprite.Score >= 1000)
+            {
+                gameState = GameState.WON;
+                enemyController.RemoveEnemy();
+            }
+            // Player loses the game if their health drops to 0.
+            else if (playerSprite.Health == 0)
+            {
+                gameState = GameState.LOST;
+            }
 
             base.Update(gameTime);
         }
@@ -264,6 +268,15 @@ namespace App05MonoGame
             DrawGameStatus(spriteBatch);
             DrawGameFooter(spriteBatch);
 
+            if (gameState == GameState.WON)
+            {
+                DrawGameWinMessage(spriteBatch);
+            }
+            else if (gameState == GameState.LOST)
+            {
+                DrawGameLoseMessage(spriteBatch);
+            }
+
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -281,14 +294,13 @@ namespace App05MonoGame
 
             string game = "Coin Chase";
             Vector2 gameSize = arialFont.MeasureString(game);
-            Vector2 topCentre = new Vector2((HD_Width/2 - gameSize.X/2), 4);
+            Vector2 topCentre = new Vector2((HD_Width / 2 - gameSize.X / 2), 4);
             spriteBatch.DrawString(arialFont, game, topCentre, Color.White);
 
             string healthText = $"Health = {playerSprite.Health}%";
             Vector2 healthSize = arialFont.MeasureString(healthText);
             Vector2 topRight = new Vector2(HD_Width - (healthSize.X + 4), 4);
             spriteBatch.DrawString(arialFont, healthText, topRight, Color.White);
-
         }
 
         /// <summary>
@@ -306,13 +318,56 @@ namespace App05MonoGame
             Vector2 namesSize = calibriFont.MeasureString(names);
             Vector2 appSize = calibriFont.MeasureString(app);
 
-            Vector2 bottomCentre = new Vector2((HD_Width - namesSize.X)/ 2, HD_Height - margin);
+            Vector2 bottomCentre = new Vector2((HD_Width - namesSize.X) / 2, HD_Height - margin);
             Vector2 bottomLeft = new Vector2(margin, HD_Height - margin);
             Vector2 bottomRight = new Vector2(HD_Width - appSize.X - margin, HD_Height - margin);
 
             spriteBatch.DrawString(calibriFont, names, bottomCentre, Color.Yellow);
             spriteBatch.DrawString(calibriFont, module, bottomLeft, Color.Yellow);
             spriteBatch.DrawString(calibriFont, app, bottomRight, Color.Yellow);
+        }
+
+        /// <summary>
+        /// Display a congratulatory message to the player saying
+        /// that they've won the game (score is over 1000) and
+        /// end.
+        /// </summary>
+        public void DrawGameWinMessage(SpriteBatch spriteBatch)
+        {
+            string winMsg = "Congratulations! You have won the game!";
+            string exit = "Press the ESC key to exit the game.";
+
+            Vector2 winMsgSize = arialFont.MeasureString(winMsg);
+            Vector2 exitSize = arialFont.MeasureString(exit);
+
+            Vector2 centre = new Vector2((HD_Width - winMsgSize.X) / 2, 
+                (HD_Height - winMsgSize.Y) / 3);
+            Vector2 lowerCentre = new Vector2((HD_Width - exitSize.X) / 2,
+                (HD_Height - exitSize.Y) / 2);
+
+            spriteBatch.DrawString(arialFont, winMsg, centre, Color.White);
+            spriteBatch.DrawString(arialFont, exit, lowerCentre, Color.White);
+        }
+
+        /// <summary>
+        /// Display a message to the player saying that they've lost
+        /// the game (health has dropped to 0) and end.
+        /// </summary>
+        public void DrawGameLoseMessage(SpriteBatch spriteBatch)
+        {
+            string loseMsg = "You have lost the game. Better luck next time!";
+            string exit = "Press the ESC key to exit the game.";
+
+            Vector2 loseMsgSize = arialFont.MeasureString(loseMsg);
+            Vector2 exitSize = arialFont.MeasureString(exit);
+
+            Vector2 centre = new Vector2((HD_Width - loseMsgSize.X) / 2,
+                (HD_Height - loseMsgSize.Y) / 3);
+            Vector2 lowerCentre = new Vector2((HD_Width - exitSize.X) / 2,
+                (HD_Height - exitSize.Y) / 2);
+
+            spriteBatch.DrawString(arialFont, loseMsg, centre, Color.White);
+            spriteBatch.DrawString(arialFont, exit, lowerCentre, Color.White);
         }
     }
 }
