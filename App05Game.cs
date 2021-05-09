@@ -220,13 +220,15 @@ namespace App05MonoGame
 
             playerSprite.Update(gameTime);
             enemyController.Update(gameTime);
+            enemyController.HasCollided(playerSprite);
 
-            if (playerSprite.HasCollided(enemySprite))
-            {
-                playerSprite.IsActive = false;
-                playerSprite.IsAlive = false;
-                enemySprite.IsActive = false;
-            }
+            // This needs removing
+            //if (playerSprite.HasCollided(enemySprite))
+            //{
+            //    playerSprite.IsActive = false;
+            //    playerSprite.IsAlive = false;
+            //    enemySprite.IsActive = false;
+            //}
 
             bulletController.UpdateBullets(gameTime);
             bulletController.HasCollided(enemySprite);

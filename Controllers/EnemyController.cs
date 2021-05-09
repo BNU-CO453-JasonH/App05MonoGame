@@ -76,6 +76,7 @@ namespace App05MonoGame.Controllers
                 if (player.Health > 5)
                 {
                     player.Health -= 5;
+                    StartEnemy();
                 }
                 else
                 {
