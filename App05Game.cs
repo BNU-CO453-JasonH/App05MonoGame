@@ -183,6 +183,8 @@ namespace App05MonoGame
             bulletController.killEffect = flameEffect;
 
             playerSprite.BulletController = bulletController;
+
+            playerSprite.Boundary = new Rectangle(0, 0, HD_Width, HD_Height); 
         }
 
         /// <summary>
