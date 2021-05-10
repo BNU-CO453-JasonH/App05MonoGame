@@ -23,7 +23,7 @@ namespace App05MonoGame.Controllers
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (06/05/2021)
+    /// Modified by Jason Huggins (10/05/2021)
     /// </authors>
     public class CoinsController
     {
@@ -38,7 +38,7 @@ namespace App05MonoGame.Controllers
         public CoinsController()
         {
             Coins = new List<AnimatedSprite>();
-            maxTime = 5.0;
+            maxTime = 3.0;
             timer = maxTime;
         }
 

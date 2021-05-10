@@ -29,7 +29,7 @@ namespace App05MonoGame
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (09/05/2021)
+    /// Modified by Jason Huggins (10/05/2021)
     /// </authors>
     public class App05Game : Game
     {
@@ -189,7 +189,9 @@ namespace App05MonoGame
 
         /// <summary>
         /// This is an enemy Sprite with four animations for the four
-        /// directions, up, down, left and right.  Has no intelligence!
+        /// directions, up, down, left and right. Walks around in
+        /// random directions and will chase the player if they
+        /// enter their field of view.
         /// </summary>
         private void SetupEnemy()
         {
@@ -200,6 +202,8 @@ namespace App05MonoGame
                 (graphicsDevice, enemySheet);
 
             enemyController.Player = playerSprite;
+
+            enemySprite.Boundary = new Rectangle(0, 0, HD_Width, HD_Height);
         }
 
         /// <summary>

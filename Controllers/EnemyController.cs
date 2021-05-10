@@ -90,16 +90,16 @@ namespace App05MonoGame.Controllers
 
         /// <summary>
         /// If the enemy collides with the player (hitting them), the
-        /// player will lose 5% of their health. If their health
+        /// player will lose 10% of their health. If their health
         /// drops to 0, they will lose the game and disappear.
         /// </summary>
         public void HasCollided(AnimatedPlayer player)
         {
             if (Enemy.HasCollided(player))
             {
-                if (player.Health > 5)
+                if (player.Health > 10)
                 {
-                    player.Health -= 5;
+                    player.Health -= 10;
                     StartEnemy();
                 }
                 else
