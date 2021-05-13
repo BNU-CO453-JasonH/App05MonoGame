@@ -23,7 +23,7 @@ namespace App05MonoGame.Controllers
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (10/05/2021)
+    /// Modified by Jason Huggins (13/05/2021)
     /// </authors>
     public class CoinsController
     {
@@ -35,6 +35,10 @@ namespace App05MonoGame.Controllers
 
         private readonly List<AnimatedSprite> Coins;        
 
+        /// <summary>
+        /// Constructor; initialises a new list of coins which
+        /// will spawn every 3 seconds and the timer. 
+        /// </summary>
         public CoinsController()
         {
             Coins = new List<AnimatedSprite>();
@@ -95,11 +99,14 @@ namespace App05MonoGame.Controllers
             return 0;
         }
 
+        /// <summary>
+        /// Spawns coins into the game at random positions every 3
+        /// seconds. 
+        /// </summary>
         public void Update(GameTime gameTime)
         {
             timer -= gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Spawns coins into the game at random positions.
             if (timer <= 0)
             {
                 int x = RandomNumber.Generator.Next(1000) + 100;
@@ -130,6 +137,15 @@ namespace App05MonoGame.Controllers
             {
                 coin.Draw(spriteBatch);
             }
+        }
+
+        /// <summary>
+        /// Clears the list of coins, used when the game is
+        /// restarted.
+        /// </summary>
+        public void Clear()
+        {
+            Coins.Clear();
         }
     }
 }

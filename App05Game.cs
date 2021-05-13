@@ -29,7 +29,7 @@ namespace App05MonoGame
     /// </summary>
     /// <authors>
     /// Derek Peacock & Andrei Cruceru
-    /// Modified by Jason Huggins (10/05/2021)
+    /// Modified by Jason Huggins (13/05/2021)
     /// </authors>
     public class App05Game : Game
     {
@@ -37,6 +37,10 @@ namespace App05MonoGame
 
         public const int HD_Height = 720;
         public const int HD_Width = 1280;
+        public const int MAX_SCORE = 1000;
+        public const int MAX_HEALTH = 100;
+        public const int NO_HEALTH = 0;
+        public const int NO_SCORE = 0;
 
         #endregion
 
@@ -67,6 +71,11 @@ namespace App05MonoGame
 
         #endregion
 
+        /// <summary>
+        /// Constructor for the game. Initialises the graphics manager,
+        /// makes the mouse cursor visible and also initialises the
+        /// relevant controllers.
+        /// </summary>
         public App05Game()
         {
             graphicsManager = new GraphicsDeviceManager(this);
@@ -97,7 +106,7 @@ namespace App05MonoGame
         }
 
         /// <summary>
-        /// use Content to load your game images, fonts,
+        /// Use Content to load your game images, fonts,
         /// music and sound effects
         /// </summary>
         protected override void LoadContent()
@@ -118,6 +127,22 @@ namespace App05MonoGame
             arialFont = Content.Load<SpriteFont>("fonts/arial");
             calibriFont = Content.Load<SpriteFont>("fonts/calibri");
 
+            // Load buttons, player and enemy sprites
+
+            SetupButtons();
+            SetupAnimatedPlayer();
+            SetupEnemy();
+
+            Texture2D coinSheet = Content.Load<Texture2D>("Actors/coin_copper");
+            coinsController.CreateCoin(graphicsDevice, coinSheet);
+        }
+
+        /// <summary>
+        /// Sets up the restart and quit buttons on the game's
+        /// user interface.
+        /// </summary>
+        private void SetupButtons()
+        {
             restartButton = new Button(arialFont,
                 Content.Load<Texture2D>("Controls/button-icon-png-200"))
             {
@@ -137,24 +162,22 @@ namespace App05MonoGame
             };
 
             quitButton.click += QuitButton_click;
-
-            SetupAnimatedPlayer();
-            SetupEnemy();
-
-            Texture2D coinSheet = Content.Load<Texture2D>("Actors/coin_copper");
-            coinsController.CreateCoin(graphicsDevice, coinSheet);
         }
 
         /// <summary>
         /// Restarts the game when the Restart button in the game
-        /// is clicked.
+        /// is clicked. The player's score and health is reset to
+        /// its initial values, as well as the player and enemy's
+        /// positions. The coins are also cleared from the screen.
         /// </summary>
         private void RestartButton_click(object sender, System.EventArgs e)
         {
-            playerSprite.Score = 0;
-            playerSprite.Health = 100;
+            playerSprite.Score = NO_SCORE;
+            playerSprite.Health = MAX_HEALTH;
+
             playerController.StartPlayer();
             enemyController.StartEnemy();
+            coinsController.Clear();
         }
 
         /// <summary>
@@ -234,16 +257,14 @@ namespace App05MonoGame
             coinsController.Update(gameTime);
             playerSprite.Score += coinsController.HasCollided(playerSprite);
 
-            enemyController.HasCollided(playerSprite);
-
             // Player wins the game if their score is over 1000.
-            if (playerSprite.Score >= 1000)
+            if (playerSprite.Score >= MAX_SCORE)
             {
                 gameState = GameState.WON;
                 enemyController.RemoveEnemy();
             }
             // Player loses the game if their health drops to 0.
-            else if (playerSprite.Health == 0)
+            else if (playerSprite.Health == NO_HEALTH)
             {
                 gameState = GameState.LOST;
             }
